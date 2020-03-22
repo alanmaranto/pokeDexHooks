@@ -1,28 +1,56 @@
 import React, { useState, useEffect } from "react";
-import { getAllPokemon } from './api/index'
+import { getAllPokemon, getPokemon } from "./api/index";
+import Card from "./components/Card";
 import "./App.css";
 
 const pokeurl = "https://pokeapi.co/api/v2/pokemon";
 
 function App() {
-  const [pokemons, setPokemons] = useState([]);
+  const [pokemonData, setPokemonData] = useState([]);
   const [nextUrl, setNextUrl] = useState("");
   const [prevUrl, setPrevUrl] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    let response = await getAllPokemon(pokeurl);
-    console.log(response.data);
-    setNextUrl(response.next);
-    setPrevUrl(response.previous);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    fetchData();
+    const fetchDataPokemon = async () => {
+      let response = await getAllPokemon(pokeurl);
+      setNextUrl(response.next);
+      setPrevUrl(response.previous);
+      await loadingPokemon(response.results);
+      setLoading(false);
+    };
+    fetchDataPokemon();
   }, []);
 
-  return <div>{loading ? <h1>Loading...</h1> : <h1>Data is fetched</h1>}</div>;
+  const loadingPokemon = async data => {
+    console.log("data", data);
+    let _pokemonData = await Promise.all(
+      data.map(async pokemon => {
+        let pokemonRecord = await getPokemon(pokemon.url);
+        return pokemonRecord;
+      })
+    );
+
+    setPokemonData(_pokemonData);
+  };
+
+  console.log(pokemonData);
+
+  return (
+    <div>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <>
+          <div className="grid-container">
+            {pokemonData.map((pokemon, index) => {
+              return <Card key={index} pokemon={pokemon} />;
+            })}
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default App;
