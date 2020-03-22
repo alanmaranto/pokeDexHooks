@@ -2,7 +2,6 @@ import React from "react";
 
 import "./style.css";
 import typeColors from "../../helpers/typeColors";
-import { cardType } from "./style";
 
 const Card = ({ pokemon }) => {
   return (
