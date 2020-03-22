@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export const getPokemon = async (url) => {
   return new Promise ((resolve, reject) => {
     fetch(url)
