@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getAllPokemon, getPokemon } from "./api/index";
 import Card from "./components/Card";
 import "./App.css";
+import Navbar from "./components/NavBar";
 
 const pokeurl = "https://pokeapi.co/api/v2/pokemon";
 
@@ -21,6 +22,25 @@ function App() {
     };
     fetchDataPokemon();
   }, []);
+
+  const next = async () => {
+    setLoading(true);
+    let data = await getAllPokemon(nextUrl)
+    await loadingPokemon(data.results)
+    setNextUrl(data.next);
+    setPrevUrl(data.previous);
+    setLoading(false)
+  }
+
+  const previous = async () => {
+    if (!prevUrl) return;
+    setLoading(true);
+    let data = await getAllPokemon(prevUrl)
+    await loadingPokemon(data.results)
+    setNextUrl(data.next);
+    setPrevUrl(data.previous);
+    setLoading(false)
+  }
 
   const loadingPokemon = async data => {
     console.log("data", data);
@@ -42,6 +62,15 @@ function App() {
         <h1>Loading...</h1>
       ) : (
         <>
+        <Navbar />
+        <div className="btn">
+          <button className="btn" onClick={previous}>
+            Prev
+          </button>
+          <button className="btn" onClick={next}>
+            Next
+          </button>
+        </div>
           <div className="grid-container">
             {pokemonData.map((pokemon, index) => {
               return <Card key={index} pokemon={pokemon} />;
