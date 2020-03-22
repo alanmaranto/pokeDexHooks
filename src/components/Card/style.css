@@ -26,6 +26,7 @@ p {
 
 .Card__name {
     text-align: center;
+    font-weight: bold;
 }
 
 .Card__data {
