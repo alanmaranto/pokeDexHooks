@@ -25,27 +25,27 @@ function App() {
 
   const next = async () => {
     setLoading(true);
-    let data = await getAllPokemon(nextUrl)
-    await loadingPokemon(data.results)
+    let data = await getAllPokemon(nextUrl);
+    await loadingPokemon(data.results);
     setNextUrl(data.next);
     setPrevUrl(data.previous);
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const previous = async () => {
     if (!prevUrl) return;
     setLoading(true);
-    let data = await getAllPokemon(prevUrl)
-    await loadingPokemon(data.results)
+    let data = await getAllPokemon(prevUrl);
+    await loadingPokemon(data.results);
     setNextUrl(data.next);
     setPrevUrl(data.previous);
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
-  const loadingPokemon = async data => {
+  const loadingPokemon = async (data) => {
     console.log("data", data);
     let _pokemonData = await Promise.all(
-      data.map(async pokemon => {
+      data.map(async (pokemon) => {
         let pokemonRecord = await getPokemon(pokemon.url);
         return pokemonRecord;
       })
@@ -54,25 +54,24 @@ function App() {
     setPokemonData(_pokemonData);
   };
 
-  console.log(pokemonData);
-
   return (
     <div>
       {loading ? (
         <h1>Loading...</h1>
       ) : (
         <>
-        <Navbar />
-        <div className="btn">
-          <button className="btn" onClick={previous}>
-            Prev
-          </button>
-          <button className="btn" onClick={next}>
-            Next
-          </button>
-        </div>
+          <Navbar />
+          <div className="btn">
+            <button className="btn" onClick={previous}>
+              Prev
+            </button>
+            <button className="btn" onClick={next}>
+              Next
+            </button>
+          </div>
           <div className="grid-container">
             {pokemonData.map((pokemon, index) => {
+              console.log('pokemon', pokemon);
               return <Card key={index} pokemon={pokemon} />;
             })}
           </div>
