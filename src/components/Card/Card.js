@@ -29,7 +29,7 @@ const Card = ({ pokemon }) => {
       <div className="Card__img">
         <img
           src={`https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png`}
-          alt="${name}"
+          alt={name}
           style={{ maxWidth: "100px"}}
         />
         {/* <img src={pokemon.sprites.front_default} alt="" /> */}
